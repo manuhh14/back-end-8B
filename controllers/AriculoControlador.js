@@ -58,9 +58,44 @@ const crear = async (req, res)=>{
     }
 }
 
+/**Metodo para listar articulos* */
+
+const listarArticulos = async (req, res)=>{
+    try {
+        /*Ralizar la consulta  de los articulos y limitar el numero de resultados */
+        const articulos =  await Articulo.find({});
+
+        /**Verificar si se encontraron los articulos */
+        if(!articulos || articulos.length===0){
+            return res.status(404).json({
+                status: "error",
+                mensaje: "No se encontraron artículos"
+            });
+        }
+
+        /*Devover los articuos  encontrados */
+        return res.status(200).json({
+            status: "success",
+            mensaje: "Artículos encontrados",
+            articulos,
+            contador: articulos.length
+        });
+
+    } catch (error) {
+        /*Manejar cualquier error que ocurra*/
+        console.error("Error al obtener los articulos:" + error);
+
+        return res.status(500).json({
+            status: "error",
+            mensaje: "Ha ocurrido un error al obtener los artículos",
+            error: error.message
+        });
+    }
+}
 
 
 module.exports = {
     prueba,
-    crear
+    crear,
+    listarArticulos
 }
